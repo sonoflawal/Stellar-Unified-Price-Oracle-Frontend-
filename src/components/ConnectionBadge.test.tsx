@@ -24,3 +24,25 @@ describe('ConnectionBadge', () => {
     expect(screen.getByText('Offline')).toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  it('connected', () => {
+    const { container } = render(<ConnectionBadge status="connected" />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('connecting', () => {
+    const { container } = render(<ConnectionBadge status="connecting" />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('reconnecting', () => {
+    const { container } = render(<ConnectionBadge status="reconnecting" />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('disconnected', () => {
+    const { container } = render(<ConnectionBadge status="disconnected" />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

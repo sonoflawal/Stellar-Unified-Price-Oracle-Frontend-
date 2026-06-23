@@ -27,3 +27,14 @@ describe('NotFound', () => {
     expect(links[0].closest('a')).toHaveAttribute('href', '/')
   })
 })
+
+describe('snapshots', () => {
+  it('default', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <NotFound />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

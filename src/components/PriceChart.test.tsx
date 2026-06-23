@@ -24,3 +24,25 @@ describe('PriceChart', () => {
     expect(screen.getByText('BTC/USD Price History')).toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  const fixedData = [
+    { price: 50000, timestamp: 1700000000000, confidence: 0.99, sources: ['chainlink'] },
+    { price: 50100, timestamp: 1700000060000, confidence: 0.99, sources: ['chainlink'] },
+  ]
+
+  it('loading', () => {
+    const { container } = render(<PriceChart data={[]} pair="BTC/USD" loading />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('empty', () => {
+    const { container } = render(<PriceChart data={[]} pair="BTC/USD" loading={false} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('with data', () => {
+    const { container } = render(<PriceChart data={fixedData} pair="BTC/USD" loading={false} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

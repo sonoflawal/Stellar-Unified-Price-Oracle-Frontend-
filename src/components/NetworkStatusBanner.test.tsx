@@ -33,3 +33,12 @@ describe('NetworkStatusBanner', () => {
     expect(container.querySelector('[role="alert"]')).not.toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  it('offline', () => {
+    vi.stubGlobal('navigator', { onLine: false })
+    const { container } = render(<NetworkStatusBanner />)
+    expect(container.firstChild).toMatchSnapshot()
+    vi.unstubAllGlobals()
+  })
+})

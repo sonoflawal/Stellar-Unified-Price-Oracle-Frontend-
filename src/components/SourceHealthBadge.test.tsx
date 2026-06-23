@@ -29,3 +29,15 @@ describe('SourceHealthBadge', () => {
     expect(screen.getAllByText('Reflector')).toHaveLength(1)
   })
 })
+
+describe('snapshots', () => {
+  it('with sources', () => {
+    const { container } = render(<SourceHealthBadge sources={['chainlink', 'redstone', 'band', 'reflector']} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('empty', () => {
+    const { container } = render(<SourceHealthBadge sources={[]} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})
