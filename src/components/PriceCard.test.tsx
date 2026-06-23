@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { PriceCard } from './PriceCard'
@@ -124,6 +124,7 @@ describe('PriceCard', () => {
 })
 
 describe('snapshots', () => {
+  const FIXED_NOW = 1700100000000
   const fixedPrice = {
     assetPair: 'BTC/USD',
     price: 50000.1234,
@@ -131,6 +132,14 @@ describe('snapshots', () => {
     confidence: 0.9876,
     sources: ['chainlink', 'redstone'],
   }
+
+  beforeEach(() => {
+    vi.spyOn(Date, 'now').mockReturnValue(FIXED_NOW)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
 
   it('default', () => {
     const { container } = render(<PriceCard price={fixedPrice} />)

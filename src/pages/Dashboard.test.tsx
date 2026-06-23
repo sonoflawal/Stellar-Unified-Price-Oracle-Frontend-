@@ -47,9 +47,10 @@ vi.mock('../context/PriceContext', () => ({
   })),
 }))
 
+const FIXED_NOW = 1700100000000
 const mockPrices = [
-  { assetPair: 'BTC/USD', price: 50000, timestamp: Date.now(), confidence: 0.99, sources: ['chainlink'] },
-  { assetPair: 'ETH/USD', price: 3000, timestamp: Date.now(), confidence: 0.95, sources: ['redstone'] },
+  { assetPair: 'BTC/USD', price: 50000, timestamp: FIXED_NOW - 60000, confidence: 0.99, sources: ['chainlink'] },
+  { assetPair: 'ETH/USD', price: 3000, timestamp: FIXED_NOW - 120000, confidence: 0.95, sources: ['redstone'] },
 ]
 
 describe('Dashboard', () => {
@@ -445,6 +446,24 @@ describe('Dashboard', () => {
 })
 
 describe('snapshots', () => {
+  beforeEach(async () => {
+    vi.spyOn(Date, 'now').mockReturnValue(1700100000000)
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: [],
+      pricesLoading: true,
+      pricesError: null,
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+  })
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
   it('loading', () => {
     const { container } = render(
       <MemoryRouter>
