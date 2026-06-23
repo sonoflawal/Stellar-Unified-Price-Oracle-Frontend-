@@ -63,3 +63,16 @@ describe('Layout', () => {
     expect(buttons.length).toBeGreaterThanOrEqual(1)
   })
 })
+
+describe('snapshots', () => {
+  it('default', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Layout>
+          <div>Content</div>
+        </Layout>
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

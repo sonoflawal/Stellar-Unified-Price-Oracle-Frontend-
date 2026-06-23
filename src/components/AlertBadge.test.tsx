@@ -77,3 +77,36 @@ describe('AlertBadge', () => {
     expect(screen.getByText('↕')).toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  it('count 1', () => {
+    const { container } = render(<AlertBadge count={1} alerts={[baseAlert()]} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('count > 1', () => {
+    const { container } = render(<AlertBadge count={2} alerts={[baseAlert(), baseAlert({ id: '2' })]} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('upper only threshold', () => {
+    const { container } = render(
+      <AlertBadge count={1} alerts={[baseAlert({ lowerThreshold: null, upperThreshold: 60000 })]} />,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('lower only threshold', () => {
+    const { container } = render(
+      <AlertBadge count={1} alerts={[baseAlert({ upperThreshold: null, lowerThreshold: 30000 })]} />,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('both thresholds', () => {
+    const { container } = render(
+      <AlertBadge count={1} alerts={[baseAlert({ upperThreshold: 60000, lowerThreshold: 30000 })]} />,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

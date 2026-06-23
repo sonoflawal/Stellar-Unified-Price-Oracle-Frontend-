@@ -193,3 +193,20 @@ describe('AlertModal', () => {
     expect(screen.getByLabelText('Close modal')).toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  it('create mode', () => {
+    const { container } = render(<AlertModal {...defaultProps} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('edit mode', () => {
+    const { container } = render(<AlertModal {...defaultProps} alert={mockAlert} onDelete={vi.fn()} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('with suggestions', () => {
+    const { container } = render(<AlertModal {...defaultProps} currentPrice={50000} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { PriceCard } from './PriceCard'
@@ -120,5 +120,44 @@ describe('PriceCard', () => {
     const { container } = render(<PriceCard price={mockPrice} />)
     const card = container.querySelector('[role="button"]')
     expect(card?.className).not.toContain('opacity-60')
+  })
+})
+
+describe('snapshots', () => {
+  const FIXED_NOW = 1700100000000
+  const fixedPrice = {
+    assetPair: 'BTC/USD',
+    price: 50000.1234,
+    timestamp: 1700000000000,
+    confidence: 0.9876,
+    sources: ['chainlink', 'redstone'],
+  }
+
+  beforeEach(() => {
+    vi.spyOn(Date, 'now').mockReturnValue(FIXED_NOW)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('default', () => {
+    const { container } = render(<PriceCard price={fixedPrice} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('isLive', () => {
+    const { container } = render(<PriceCard price={fixedPrice} isLive />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('isStale', () => {
+    const { container } = render(<PriceCard price={fixedPrice} isStale />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('hasAlert', () => {
+    const { container } = render(<PriceCard price={fixedPrice} hasAlert />)
+    expect(container.firstChild).toMatchSnapshot()
   })
 })

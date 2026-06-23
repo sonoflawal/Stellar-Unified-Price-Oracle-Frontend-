@@ -7,6 +7,7 @@ export function FilterBar() {
   const search = searchParams.get('search') || ''
   const confidence = searchParams.get('confidence') || 'all'
   const source = searchParams.get('source') || 'all'
+  const sort = searchParams.get('sort') || ''
 
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +54,21 @@ export function FilterBar() {
     [setSearchParams]
   )
 
+  const handleSortChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev)
+        if (e.target.value) {
+          next.set('sort', e.target.value)
+        } else {
+          next.delete('sort')
+        }
+        return next
+      })
+    },
+    [setSearchParams]
+  )
+
   const handleClearFilters = useCallback(() => {
     setSearchParams(new URLSearchParams())
   }, [setSearchParams])
@@ -69,7 +85,7 @@ export function FilterBar() {
             type="text"
             value={search}
             onChange={handleSearchChange}
-            placeholder="e.g. XLM"
+            placeholder="Search by asset pair..."
             className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors pl-10"
           />
           <svg
@@ -119,6 +135,24 @@ export function FilterBar() {
           <option value="redstone">Redstone</option>
           <option value="band">Band</option>
           <option value="reflector">Reflector</option>
+        </select>
+      </div>
+
+      <div className="w-full md:w-48">
+        <label htmlFor="sort" className="block text-sm font-medium text-gray-400 mb-1.5">
+          Sort By
+        </label>
+        <select
+          id="sort"
+          value={sort}
+          onChange={handleSortChange}
+          className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors appearance-none"
+        >
+          <option value="">Default</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="confidence">Confidence</option>
+          <option value="recent">Most Recent</option>
         </select>
       </div>
 
